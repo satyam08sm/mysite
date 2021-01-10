@@ -1,0 +1,21 @@
+{% extends 'product/base.html' %}
+{% block content %}
+    {% for product in productlist_list %}
+        <div class="list-group">
+            <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">{{ product }}</h4>
+                <p class="list-group-item-text">{{ product.desc }}
+                <ul>
+                <li>
+                    price : {{ product.product_price }}
+                </li>
+                <li>
+                    {{ product.img.url }}
+                </li>
+                </ul>
+                </p>
+                <img src="../../images/stretched-1366-768-221109.jpg" alt="img" width="500px">
+            </a>
+        </div>
+    {% endfor %}
+{% endblock content %}
