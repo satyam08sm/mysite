@@ -1,5 +1,6 @@
 from django.db import models
 import django.utils
+from django.shortcuts import reverse
 from django.core.validators import MaxValueValidator
 
 CATEGORIES = (
@@ -26,3 +27,9 @@ class ProductList(models.Model):
 
     def product_price(self):
         return (1 - (self.discount / 100)) * self.price
+
+    def get_add_to_cart_url(self):
+        return reverse("product:add-to-cart", args=(self.id,))
+
+    def get_remove_from_cart_url(self):
+        return reverse("product:remove-from-cart", args=(self.id,))

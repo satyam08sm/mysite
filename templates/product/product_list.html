@@ -1,21 +1,23 @@
 {% extends 'product/base.html' %}
 {% block content %}
     {% for product in productlist_list %}
-        <div class="list-group">
-            <a href="#" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ product }}</h4>
-                <p class="list-group-item-text">{{ product.desc }}
-                <ul>
-                <li>
-                    price : {{ product.product_price }}
-                </li>
-                <li>
-                    {{ product.img.url }}
-                </li>
-                </ul>
-                </p>
-                <img src="../../images/stretched-1366-768-221109.jpg" alt="img" width="500px">
-            </a>
+        <div class="col-md-4">
+            <div class="card-deck">
+                <div class="card">
+                    <img class="card-img-top" src="{{ product.img.url }}" alt="Card image cap" width="240" height="200">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.desc }}</p>
+                        <p class="card-text">
+                            {% if product in cart.products.all %}
+                                <a href="{{ product.get_remove_from_cart_url }}">Remove from cart</a>
+                            {% else %}
+                                <a href="{{ product.get_add_to_cart_url }}">Add to cart</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endfor %}
 {% endblock content %}

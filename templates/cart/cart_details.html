@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{%  block content %}
+    <p>{{ cart }}</p>
+    <h2>Products: </h2><br/>
+    {% for product in cart.products.all %}
+        <p>{{ product }}</p>
+        <p>price : {{ product.product_price }}</p>
+    {% endfor %}
+    <h1>Total : {{ cart.cart_total }}</h1>
+{% endblock content %}
