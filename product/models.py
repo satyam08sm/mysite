@@ -21,12 +21,19 @@ class ProductList(models.Model):
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
     updated_at = models.DateTimeField(editable=False, auto_now=True)
     discount = models.IntegerField(validators=[MaxValueValidator(100)], default=0)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name
 
     def product_price(self):
         return (1 - (self.discount / 100)) * self.price
+
+    def get_quanity(self):
+        return self.quantity
+
+    def get_final_price(self):
+        return self.product_price() * self.get_quanity()
 
     def get_add_to_cart_url(self):
         return reverse("product:add-to-cart", args=(self.id,))

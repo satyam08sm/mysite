@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView
+from django.contrib.auth.decorators import login_required
+
 from .models import ProductList
 from cart.models import Cart
 
@@ -11,11 +13,13 @@ class ProductListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cart'] = Cart.objects.filter(user=self.request.user).first()
-        print(context['cart'].products.all())
+        if self.request.user.is_authenticated:
+            context['cart'] = Cart.objects.filter(user=self.request.user).first()
+            # print(context['cart'].products.all())
         return context
 
 
+@login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(ProductList, id=product_id)
     cart = Cart.objects.filter(user=request.user)
@@ -27,6 +31,7 @@ def add_to_cart(request, product_id):
     return redirect("product:product_list")
 
 
+@login_required
 def remove_from_cart(request, product_id):
     product = get_object_or_404(ProductList, id=product_id)
     cart = Cart.objects.filter(user=request.user).first()

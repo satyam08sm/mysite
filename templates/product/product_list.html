@@ -9,15 +9,24 @@
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">{{ product.desc }}</p>
                         <p class="card-text">
-                            {% if product in cart.products.all %}
-                                <a href="{{ product.get_remove_from_cart_url }}">Remove from cart</a>
+                            {% if request.user.is_authenticated %}
+                                {% if product in cart.products.all %}
+                                    <h3>Quantity: {{ product.quantity }}</h3>
+                                    <a href="{{ product.get_remove_from_cart_url }}">Remove from cart</a>
+                                {% else %}
+                                    <a href="{{ product.get_add_to_cart_url }}">Add to cart</a>
+                                {% endif %}
                             {% else %}
                                 <a href="{{ product.get_add_to_cart_url }}">Add to cart</a>
                             {% endif %}
+
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     {% endfor %}
+    {% if request.user.is_authenticated and cart %}
+        <a href="{% url 'cart:cart-details' pk=cart.id %}">View Cart</a>
+    {% endif %}
 {% endblock content %}

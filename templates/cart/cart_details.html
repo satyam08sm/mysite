@@ -1,10 +1,45 @@
-{% extends 'base.html' %}
-{%  block content %}
+{% extends 'product/base.html' %}
+{#{% if cart.user.is_authenticated %}#}
+{% block content %}
+
     <p>{{ cart }}</p>
     <h2>Products: </h2><br/>
     {% for product in cart.products.all %}
         <p>{{ product }}</p>
         <p>price : {{ product.product_price }}</p>
+        {#        <h1>Quantity: {{ product.get_quanity }}</h1>#}
+        <form method="post" action="{% url 'cart:cart-details' pk=cart.id %}">
+        {% csrf_token %}
+        <label for="quantity{{ product.id }}">Quantity</label>
+        <input type="number" min="1" value="{{ product.get_quanity }}" id="quantity{{ product.id }}"
+               name="quantity{{ product.id }}"
+               class="quantity-input"/>
+        <input type="number" id="final_price_{{ product.id }}" value="{{ product.get_final_price }}"
+               class="hidden-price hidden"/>
+        <script>
+            $('#quantity{{ product.id }}').bind('click keyup', function () {
+                $('#final_price_{{ product.id }}').val($(this).val() * {{ product.product_price }});
+            });
+        </script>
     {% endfor %}
-    <h1>Total : {{ cart.cart_total }}</h1>
+{#<h1 id="cartTotal">{{ cart.cart_total }}</h1>#}
+    <br/><br/>
+    <label for="cartTotal">Total: </label>
+    <input type="text" value="{{ cart.cart_total }}" id="cartTotal" name="cartTotal" readonly/>
+<input type="submit" value="Place order"/>
+</form>
+    <script>
+        $('.quantity-input').bind('click keyup', function () {
+            var prices = document.getElementsByClassName('hidden-price');
+            var cart_total = 0.0;
+            for (var i = 0; i < prices.length; i++) {
+                {#alert(prices[i].value);#}
+                cart_total = cart_total + parseFloat(prices[i].value);
+            }
+            {#alert(cart_total);#}
+            document.getElementById('cartTotal').value = cart_total;
+        });
+
+    </script>
 {% endblock content %}
+{#{% endif %}#}

@@ -6,6 +6,6 @@ from .models import Cart
 from product.models import ProductList
 
 
-class CartDetails(generic.DetailView):
+class CartDetails(LoginRequiredMixin, generic.DetailView):
     model = Cart
     template_name = 'cart/cart_details.html'
